@@ -1,0 +1,62 @@
+# .NET build
+bin/
+obj/
+publish/
+
+# .NET / NuGet
+*.nupkg
+
+# Visual Studio
+.vs/
+*.user
+*.rsuser
+*.suo
+
+# JetBrains Rider
+.idea/
+
+# Logs
+*.log
+
+# Entity Framework
+*.dbmdl
+
+# Secrets / local configuration
+secrets.json
+
+# Angular / Node
+node_modules/
+dist/
+tmp/
+out-tsc/
+.bazel-out/
+.angular/cache/
+coverage/
+.sass-cache/
+.typings/
+npm-debug.log
+yarn-error.log
+
+# Angular / testing
+testem.log
+__screenshots__/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# Other IDEs
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# System files
+.DS_Store
+Thumbs.db
