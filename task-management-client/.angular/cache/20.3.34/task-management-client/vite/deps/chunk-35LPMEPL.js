@@ -1,4 +1,8 @@
 import {
+  XhrFactory,
+  parseCookieValue
+} from "./chunk-NHVCA2QY.js";
+import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
   DOCUMENT,
@@ -38,27 +42,12 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-OSBFE4MD.js";
+} from "./chunk-AXVXHESM.js";
 import {
   __async,
   __objRest,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
-
-// node_modules/@angular/common/fesm2022/xhr.mjs
-function parseCookieValue(cookieStr, name) {
-  name = encodeURIComponent(name);
-  for (const cookie of cookieStr.split(";")) {
-    const eqIndex = cookie.indexOf("=");
-    const [cookieName, cookieValue] = eqIndex == -1 ? [cookie, ""] : [cookie.slice(0, eqIndex), cookie.slice(eqIndex + 1)];
-    if (cookieName.trim() === name) {
-      return decodeURIComponent(cookieValue);
-    }
-  }
-  return null;
-}
-var XhrFactory = class {
-};
 
 // node_modules/@angular/common/fesm2022/module.mjs
 var HttpHandler = class {
@@ -2922,8 +2911,6 @@ function appendMissingHeadersDetection(url, headers, headersToInclude) {
 }
 
 export {
-  parseCookieValue,
-  XhrFactory,
   HttpHandler,
   HttpBackend,
   HttpHeaders,
@@ -2964,4 +2951,4 @@ export {
   HTTP_TRANSFER_CACHE_ORIGIN_MAP,
   withHttpTransferCache
 };
-//# sourceMappingURL=chunk-PNFTACU7.js.map
+//# sourceMappingURL=chunk-35LPMEPL.js.map
