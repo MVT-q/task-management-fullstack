@@ -50,6 +50,16 @@ namespace TaskMenagementAPI
                 });
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AngularApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             var jwtOptions = builder.Configuration
                 .GetSection("Jwt")
                 .Get<JwtOptions>()!;
@@ -107,6 +117,8 @@ namespace TaskMenagementAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AngularApp");
 
             app.UseExceptionHandlingMiddleware();
 

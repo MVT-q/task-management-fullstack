@@ -1,12 +1,28 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('task-management-client');
+  constructor(private readonly authService: AuthService) {}
+
+  testLogin(): void {
+    this.authService
+      .login({
+        username: 'name',
+        password: 'string',
+      })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
+  }
 }
