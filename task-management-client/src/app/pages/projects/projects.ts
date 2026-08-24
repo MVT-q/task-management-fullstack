@@ -58,6 +58,17 @@ export class Projects implements OnInit {
     });
   }
 
+  deleteProject(projectId: number): void {
+    this.projectService.deleteProject(projectId).subscribe({
+      next: () => {
+        this.projects = this.projects.filter((project) => project.id !== projectId);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
   logout(): void {
     this.authService.logout();
 
