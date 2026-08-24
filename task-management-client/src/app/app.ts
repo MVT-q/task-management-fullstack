@@ -34,6 +34,14 @@ export class App {
       });
   }
 
+  logout(): void {
+    this.authService.logout();
+  }
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
   getProjects(): void {
     this.projectService.getProjects().subscribe({
       next: (projects) => {

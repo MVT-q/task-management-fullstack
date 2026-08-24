@@ -1,17 +1,23 @@
-<form (ngSubmit)="login()">
-  <input 
-    type="text" 
-    name="username" 
-    [(ngModel)]="username" 
-    placeholder="Username">
+@if (!isLoggedIn()) {
+  <form (ngSubmit)="login()">
+    <input 
+      type="text" 
+      name="username" 
+      [(ngModel)]="username" 
+      placeholder="Username">
+  
+    <input 
+      type="password" 
+      name="password" 
+      [(ngModel)]="password" 
+      placeholder="Password">
+  
+    <button type="submit">Login</button>
+  </form>
+}
 
-  <input 
-    type="password" 
-    name="password" 
-    [(ngModel)]="password" 
-    placeholder="Password">
-
-  <button type="submit">Login</button>
-
+@if (isLoggedIn()) {
+  <button type="button" (click)="logout()">Logout</button>
+  
   <button type="button" (click)="getProjects()">Get projects</button>
-</form>
+}
