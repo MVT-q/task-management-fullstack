@@ -1,5 +1,21 @@
 <button type="button" (click)="logout()">Logout</button>
 
+<form (ngSubmit)="createProject()">
+  <input 
+    type="text" 
+    name="name" 
+    [(ngModel)]="projectName" 
+    placeholder="Project name">
+
+  <input
+    type="text"
+    name="description"
+    [(ngModel)]="projectDescription"
+    placeholder="Project description">
+
+  <button type="submit">Create project</button>
+</form>
+
 @for (project of projects; track project.id) {
   <div>
     <h2>{{ project.name }}</h2>
