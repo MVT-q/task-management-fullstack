@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Login } from '../models/login.model';
 import { LoginResponse } from '../models/login-response.model';
+import { RegisterRequest } from '../models/register-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +23,9 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return localStorage.getItem('token') !== null;
+  }
+
+  register(request: RegisterRequest): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/register`, request);
   }
 }

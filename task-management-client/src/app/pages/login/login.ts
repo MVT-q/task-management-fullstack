@@ -35,4 +35,8 @@ export class Login {
         },
       });
   }
+
+  toCreateAccount(): void {
+    this.router.navigate(['/register']);
+  }
 }
