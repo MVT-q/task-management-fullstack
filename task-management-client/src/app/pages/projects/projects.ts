@@ -5,6 +5,7 @@ import { Project } from '../../models/project.model';
 import { Router } from '@angular/router';
 import { CreateProject } from '../../models/create-project.model';
 import { FormsModule } from '@angular/forms';
+import { UpdateProject } from '../../models/update-project.model';
 
 @Component({
   selector: 'app-projects',
@@ -17,6 +18,10 @@ export class Projects implements OnInit {
 
   projectName = '';
   projectDescription = '';
+
+  editingProjectId: number | null = null;
+  editingName = '';
+  editingDescription = '';
 
   constructor(
     private readonly authService: AuthService,
@@ -62,6 +67,36 @@ export class Projects implements OnInit {
     this.projectService.deleteProject(projectId).subscribe({
       next: () => {
         this.projects = this.projects.filter((project) => project.id !== projectId);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  startEdit(project: Project): void {
+    this.editingProjectId = project.id;
+    this.editingName = project.name;
+    this.editingDescription = project.description;
+  }
+
+  cancelEdit(): void {
+    this.editingProjectId = null;
+  }
+
+  saveProject(projectId: number): void {
+    const request: UpdateProject = {
+      name: this.editingName,
+      description: this.editingDescription,
+    };
+
+    this.projectService.updateProject(projectId, request).subscribe({
+      next: (updateProject) => {
+        this.projects = this.projects.map((project) =>
+          project.id === projectId ? updateProject : project,
+        );
+
+        this.editingProjectId = null;
       },
       error: (error) => {
         console.error(error);
