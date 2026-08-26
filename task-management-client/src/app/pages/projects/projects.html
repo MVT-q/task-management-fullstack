@@ -37,6 +37,8 @@
     <div>
       <h2>{{ project.name }}</h2>
       <p>{{ project.description }}</p>
+
+      <button type="button" (click)="openProject(project.id)">Open</button>
   
       <button type="button"(click)="startEdit(project)">Edit</button>
   

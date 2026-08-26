@@ -28,4 +28,8 @@ export class ProjectService {
   updateProject(projectId: number, project: UpdateProject): Observable<Project> {
     return this.http.put<Project>(`${this.apiUrl}/${projectId}`, project);
   }
+
+  getProject(projectId: number): Observable<Project> {
+    return this.http.get<Project>(`${this.apiUrl}/${projectId}`);
+  }
 }

@@ -4,10 +4,12 @@ import { Projects } from './pages/projects/projects';
 import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
 import { Register } from './pages/register/register';
+import { ProjectDetails } from './pages/project-details/project-details';
 
 export const routes: Routes = [
   { path: 'register', component: Register, canActivate: [guestGuard] },
   { path: 'login', component: Login, canActivate: [guestGuard] },
   { path: 'projects', component: Projects, canActivate: [authGuard] },
+  { path: 'projects/:projectId', component: ProjectDetails, canActivate: [authGuard] },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];

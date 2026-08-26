@@ -104,6 +104,10 @@ export class Projects implements OnInit {
     });
   }
 
+  openProject(projectId: number): void {
+    this.router.navigate(['/projects', projectId]);
+  }
+
   logout(): void {
     this.authService.logout();
 

@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
-import { ProjectService } from './services/project.service';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
