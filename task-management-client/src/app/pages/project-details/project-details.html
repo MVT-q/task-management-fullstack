@@ -2,4 +2,23 @@
   <h1>{{ project.name }}</h1>
 
   <p>{{ project.description }}</p>
+
+  <button type="button" (click)="toggleMembers()">
+    {{ showMembers ? 'Hide members' : 'Show members' }}
+  </button>
+
+  @if (showMembers) {
+    @if (members.length > 0) {
+      <h2>Members</h2>
+
+      @for (member of members; track member.userId) {
+        <p>
+          {{ member.username }} - Role: {{ member.role }}
+        </p>
+      }
+    } 
+    @else {
+      <p>No members found</p>
+    }
+  }
 }

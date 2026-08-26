@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Project } from '../models/project.model';
 import { CreateProject } from '../models/create-project.model';
 import { UpdateProject } from '../models/update-project.model';
+import { ProjectMember } from '../models/project-member.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,9 @@ export class ProjectService {
 
   getProject(projectId: number): Observable<Project> {
     return this.http.get<Project>(`${this.apiUrl}/${projectId}`);
+  }
+
+  getProjectMembers(projectId: number): Observable<ProjectMember[]> {
+    return this.http.get<ProjectMember[]>(`${this.apiUrl}/${projectId}/members`);
   }
 }
