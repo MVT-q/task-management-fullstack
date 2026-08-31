@@ -15,6 +15,21 @@
         <div>
           <span> {{ member.username }} — Role: {{ member.role }} </span>
 
+          @if (editingMemberId === member.userId) {
+            <select [(ngModel)]="selectedRole">
+              @for (role of roles; track role.value) {
+                <option [ngValue]="role.value">
+                  {{ role.label }}
+                </option>
+              }
+            </select>
+            <button type="button" (click)="saveMemberRole(member.userId)">Save</button>
+
+            <button type="button" (click)="cancelMemberRoleEdit()">Cancel</button>
+          } @else {
+            <button type="button" (click)="startEditMemberRole(member)">Edit role</button>
+          }
+
           <button type="button" (click)="removeMember(member.userId)">Remove</button>
         </div>
       }

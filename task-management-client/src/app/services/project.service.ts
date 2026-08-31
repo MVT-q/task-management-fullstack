@@ -6,6 +6,7 @@ import { CreateProject } from '../models/create-project.model';
 import { UpdateProject } from '../models/update-project.model';
 import { ProjectMember } from '../models/project-member.model';
 import { AddProjectMember } from '../models/add-project-member.model';
+import { UpdateProjectMemberRole } from '../models/update-project-member-role.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +46,13 @@ export class ProjectService {
 
   removeProjectMember(projectId: number, userId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${projectId}/members/${userId}`);
+  }
+
+  updateMemberRole(
+    projectId: number,
+    userId: number,
+    request: UpdateProjectMemberRole,
+  ): Observable<ProjectMember> {
+    return this.http.patch<ProjectMember>(`${this.apiUrl}/${projectId}/members/${userId}`, request);
   }
 }

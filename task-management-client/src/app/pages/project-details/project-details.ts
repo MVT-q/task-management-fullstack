@@ -5,6 +5,8 @@ import { ProjectService } from '../../services/project.service';
 import { ProjectMember } from '../../models/project-member.model';
 import { FormsModule } from '@angular/forms';
 import { AddProjectMember } from '../../models/add-project-member.model';
+import { ProjectRole } from '../../models/project-role';
+import { UpdateProjectMemberRole } from '../../models/update-project-member-role.model';
 
 @Component({
   selector: 'app-project-details',
@@ -20,6 +22,13 @@ export class ProjectDetails implements OnInit {
   showMembers = false;
 
   newMemberUserId = 0;
+
+  editingMemberId: number | null = null;
+  selectedRole: number = 0;
+  roles = [
+    { value: ProjectRole.Member, label: 'Member' },
+    { value: ProjectRole.Manager, label: 'Manager' },
+  ];
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -76,6 +85,34 @@ export class ProjectDetails implements OnInit {
     this.projectService.removeProjectMember(this.projectId, userId).subscribe({
       next: () => {
         this.members = this.members.filter((member) => member.userId !== userId);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  startEditMemberRole(member: ProjectMember): void {
+    this.editingMemberId = member.userId;
+    this.selectedRole = member.role;
+  }
+
+  cancelMemberRoleEdit(): void {
+    this.editingMemberId = null;
+  }
+
+  saveMemberRole(userId: number): void {
+    const request: UpdateProjectMemberRole = {
+      role: this.selectedRole,
+    };
+
+    this.projectService.updateMemberRole(this.projectId, userId, request).subscribe({
+      next: (updatedMember) => {
+        this.members = this.members.map((member) =>
+          member.userId === userId ? updatedMember : member,
+        );
+
+        this.editingMemberId = null;
       },
       error: (error) => {
         console.error(error);
