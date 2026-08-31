@@ -5,6 +5,7 @@ import { Project } from '../models/project.model';
 import { CreateProject } from '../models/create-project.model';
 import { UpdateProject } from '../models/update-project.model';
 import { ProjectMember } from '../models/project-member.model';
+import { AddProjectMember } from '../models/add-project-member.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,5 +37,13 @@ export class ProjectService {
 
   getProjectMembers(projectId: number): Observable<ProjectMember[]> {
     return this.http.get<ProjectMember[]>(`${this.apiUrl}/${projectId}/members`);
+  }
+
+  addProjectMember(projectId: number, member: AddProjectMember): Observable<ProjectMember> {
+    return this.http.post<ProjectMember>(`${this.apiUrl}/${projectId}/members`, member);
+  }
+
+  removeProjectMember(projectId: number, userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${projectId}/members/${userId}`);
   }
 }

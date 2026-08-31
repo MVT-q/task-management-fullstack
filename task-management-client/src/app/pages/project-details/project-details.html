@@ -12,13 +12,18 @@
       <h2>Members</h2>
 
       @for (member of members; track member.userId) {
-        <p>
-          {{ member.username }} - Role: {{ member.role }}
-        </p>
+        <div>
+          <span> {{ member.username }} — Role: {{ member.role }} </span>
+
+          <button type="button" (click)="removeMember(member.userId)">Remove</button>
+        </div>
       }
-    } 
-    @else {
+    } @else {
       <p>No members found</p>
     }
   }
+
+  <input type="number" name="userId" [(ngModel)]="newMemberUserId" placeholder="User ID" />
+
+  <button type="button" (click)="addMember()">Add member</button>
 }
