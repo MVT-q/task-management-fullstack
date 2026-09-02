@@ -38,7 +38,88 @@
     }
   }
 
+  <br />
+
   <input type="number" name="userId" [(ngModel)]="newMemberUserId" placeholder="User ID" />
 
   <button type="button" (click)="addMember()">Add member</button>
+
+  <br />
+
+  <button type="button" (click)="loadTasks()">Show tasks</button>
+
+  @if (showTasks) {
+    <h2>Tasks</h2>
+
+    <input type="text" name="search" [(ngModel)]="search" placeholder="Search tasks" />
+
+    <select [(ngModel)]="selectedStatus">
+      <option [ngValue]="undefined">All statuses</option>
+
+      @for (status of statuses; track status.value) {
+        <option [ngValue]="status.value">
+          {{ status.label }}
+        </option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedPriority">
+      <option [ngValue]="undefined">All priorities</option>
+
+      @for (priority of priorities; track priority.value) {
+        <option [ngValue]="priority.value">
+          {{ priority.label }}
+        </option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedSortBy">
+      <option [ngValue]="undefined">-</option>
+
+      @for (sort of sorts; track sort.value) {
+        <option [ngValue]="sort.value">
+          {{ sort.label }}
+        </option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedDescending">
+      <option [ngValue]="undefined">-</option>
+
+      <option [ngValue]="false">Ascending</option>
+
+      <option [ngValue]="true">Descending</option>
+    </select>
+
+    <button type="button" (click)="loadTasks()">Search</button>
+
+    @if (tasks.length > 0) {
+      @for (task of tasks; track task.id) {
+        <div>
+          <h3>{{ task.title }}</h3>
+
+          <p>{{ task.description }}</p>
+
+          <p>Status: {{ task.status }}</p>
+
+          <p>Priority: {{ task.priority }}</p>
+
+          <p>
+            Due date:
+            {{ task.dueDate ?? 'Not set' }}
+          </p>
+
+          <p>
+            Assignee:
+            {{ task.assigneeUsername ?? 'Unassigned' }}
+          </p>
+        </div>
+      }
+    } @else {
+      <p>No tasks found</p>
+    }
+
+    <button type="button" [disabled]="currentPage === 1" (click)="previousPage()">Previous</button>
+    <button type="button" [disabled]="tasks.length < pageSize" (click)="nextPage()">Next</button>
+  }
 }

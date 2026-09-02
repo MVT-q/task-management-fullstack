@@ -9,7 +9,7 @@ using TaskMenagementAPI.Services;
 namespace TaskMenagementAPI.Controllers
 {
     [ApiController]
-    [Route("projects/{projectId}/tasks")]
+    [Route("api/projects/{projectId}/tasks")]
     public class ProjectTaskController : BaseController
     {
         private readonly ProjectTaskService _projectTaskService;

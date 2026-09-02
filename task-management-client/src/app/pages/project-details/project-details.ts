@@ -7,6 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { AddProjectMember } from '../../models/add-project-member.model';
 import { ProjectRole } from '../../models/project-role';
 import { UpdateProjectMemberRole } from '../../models/update-project-member-role.model';
+import { ProjectTask } from '../../models/project-task.model';
+import { TaskQuery } from '../../models/task-query.model';
+import { ProjectTaskService } from '../../services/project-task.service';
+import { ProjectTaskStatus } from '../../models/project-task-status';
+import { ProjectTaskPriority } from '../../models/project-task-priority';
+import { TaskSortBy } from '../../models/task-sort-by';
 
 @Component({
   selector: 'app-project-details',
@@ -24,15 +30,48 @@ export class ProjectDetails implements OnInit {
   newMemberUserId = 0;
 
   editingMemberId: number | null = null;
+
   selectedRole: number = 0;
   roles = [
     { value: ProjectRole.Member, label: 'Member' },
     { value: ProjectRole.Manager, label: 'Manager' },
   ];
 
+  tasks: ProjectTask[] = [];
+  showTasks = false;
+
+  search = '';
+
+  selectedStatus: number | undefined;
+  statuses = [
+    { value: ProjectTaskStatus.Todo, label: 'Todo' },
+    { value: ProjectTaskStatus.InProgress, label: 'In progress' },
+    { value: ProjectTaskStatus.Done, label: 'Done' },
+  ];
+
+  selectedPriority: number | undefined;
+  priorities = [
+    { value: ProjectTaskPriority.Low, label: 'Low' },
+    { value: ProjectTaskPriority.Medium, label: 'Medium' },
+    { value: ProjectTaskPriority.High, label: 'High' },
+  ];
+
+  selectedSortBy: number | undefined;
+  sorts = [
+    { value: TaskSortBy.Status, label: 'Sort by status' },
+    { value: TaskSortBy.Priority, label: 'Sort by priority' },
+    { value: TaskSortBy.DueDate, label: 'Sort by due date' },
+  ];
+
+  selectedDescending: boolean | undefined;
+
+  currentPage = 1;
+  pageSize = 2;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly projectService: ProjectService,
+    private readonly projectTaskService: ProjectTaskService,
   ) {}
 
   ngOnInit(): void {
@@ -118,5 +157,45 @@ export class ProjectDetails implements OnInit {
         console.error(error);
       },
     });
+  }
+
+  loadTasks(): void {
+    const query: TaskQuery = {
+      search: this.search,
+      status: this.selectedStatus,
+      priority: this.selectedPriority,
+      sortBy: this.selectedSortBy,
+      descending: this.selectedDescending,
+      page: this.currentPage,
+      pageSize: this.pageSize,
+    };
+
+    this.projectTaskService.getTasks(this.projectId, query).subscribe({
+      next: (tasks) => {
+        this.tasks = tasks;
+        this.showTasks = true;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  nextPage(): void {
+    if (this.tasks.length === this.pageSize) {
+      this.currentPage++;
+      this.loadTasks();
+    } else if (this.tasks.length < this.pageSize) {
+      return;
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage === 1) {
+      return;
+    }
+
+    this.currentPage--;
+    this.loadTasks();
   }
 }
