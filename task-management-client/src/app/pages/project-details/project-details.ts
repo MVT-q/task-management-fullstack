@@ -13,6 +13,7 @@ import { ProjectTaskService } from '../../services/project-task.service';
 import { ProjectTaskStatus } from '../../models/project-task-status';
 import { ProjectTaskPriority } from '../../models/project-task-priority';
 import { TaskSortBy } from '../../models/task-sort-by';
+import { CreateProjectTask } from '../../models/create-project-task.model';
 
 @Component({
   selector: 'app-project-details',
@@ -67,6 +68,10 @@ export class ProjectDetails implements OnInit {
 
   currentPage = 1;
   pageSize = 2;
+
+  taskTitle = '';
+  taskDescription = '';
+  taskDueDate: string | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -197,5 +202,37 @@ export class ProjectDetails implements OnInit {
 
     this.currentPage--;
     this.loadTasks();
+  }
+
+  createTask(): void {
+    const task: CreateProjectTask = {
+      title: this.taskTitle,
+      description: this.taskDescription,
+      dueDate: this.taskDueDate,
+    };
+
+    this.projectTaskService.createProjectTask(this.projectId, task).subscribe({
+      next: () => {
+        this.loadTasks();
+
+        this.taskTitle = '';
+        this.taskDescription = '';
+        this.taskDueDate = null;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  deleteTask(taskId: number): void {
+    this.projectTaskService.deleteProjectTask(this.projectId, taskId).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter((task) => task.id !== taskId);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 }

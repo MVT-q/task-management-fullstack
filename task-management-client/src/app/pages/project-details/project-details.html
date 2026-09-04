@@ -46,6 +46,17 @@
 
   <br />
 
+  <form (ngSubmit)="createTask()">
+    <input type="text" name="taskTitle" [(ngModel)]="taskTitle" placeholder="Task title">
+    
+    <input type="text" name="taskDescription" [(ngModel)]="taskDescription" placeholder="Task description">
+
+    <span>Due date:</span>
+    <input type="date" name="dueDate" [(ngModel)]="taskDueDate">
+    
+    <button type="submit">Create task</button>
+  </form>
+
   <button type="button" (click)="loadTasks()">Show tasks</button>
 
   @if (showTasks) {
@@ -113,6 +124,8 @@
             Assignee:
             {{ task.assigneeUsername ?? 'Unassigned' }}
           </p>
+          
+          <button type="button" (click)="deleteTask(task.id)">Delete task</button>
         </div>
       }
     } @else {

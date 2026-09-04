@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ProjectTask } from '../models/project-task.model';
 import { TaskQuery } from '../models/task-query.model';
 import { Observable } from 'rxjs';
+import { CreateProjectTask } from '../models/create-project-task.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,13 @@ export class ProjectTaskService {
     }
 
     return this.http.get<ProjectTask[]>(`${this.apiUrl}/${projectId}/tasks`, { params });
+  }
+
+  createProjectTask(projectId: number, request: CreateProjectTask): Observable<ProjectTask> {
+    return this.http.post<ProjectTask>(`${this.apiUrl}/${projectId}/tasks`, request);
+  }
+
+  deleteProjectTask(projectId: number, taskId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${projectId}/tasks/${taskId}`);
   }
 }
