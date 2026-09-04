@@ -14,6 +14,11 @@ import { ProjectTaskStatus } from '../../models/project-task-status';
 import { ProjectTaskPriority } from '../../models/project-task-priority';
 import { TaskSortBy } from '../../models/task-sort-by';
 import { CreateProjectTask } from '../../models/create-project-task.model';
+import { UpdateProjectTask } from '../../models/update-project-task.model';
+import { UpdateProjectTaskStatus } from '../../models/update-project-task-status.model';
+import { UpdateProjectTaskPriority } from '../../models/update-project-task-priority.model';
+import { UpdateProjectTaskDueDate } from '../../models/update-project-task-due-date.model';
+import { UpdateProjectTaskAssignee } from '../../models/update-project-task-assignee.model';
 
 @Component({
   selector: 'app-project-details',
@@ -72,6 +77,15 @@ export class ProjectDetails implements OnInit {
   taskTitle = '';
   taskDescription = '';
   taskDueDate: string | null = null;
+
+  editingTaskId: number | null = null;
+  editingOriginalTask: ProjectTask | null = null;
+  editingTaskTitle = '';
+  editingTaskDescription = '';
+  editingTaskStatus: ProjectTaskStatus = ProjectTaskStatus.Todo;
+  editingTaskPriority: ProjectTaskPriority = ProjectTaskPriority.Medium;
+  editingTaskDueDate: string | null = null;
+  editingTaskAssigneeId: number | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -234,5 +248,132 @@ export class ProjectDetails implements OnInit {
         console.error(error);
       },
     });
+  }
+
+  startEditTask(task: ProjectTask): void {
+    this.editingOriginalTask = task;
+    this.editingTaskId = task.id;
+    this.editingTaskTitle = task.title;
+    this.editingTaskDescription = task.description;
+    this.editingTaskStatus = task.status;
+    this.editingTaskPriority = task.priority;
+    this.editingTaskDueDate = task.dueDate ? task.dueDate.split('T')[0] : null;
+    this.editingTaskAssigneeId = task.assigneeId;
+  }
+
+  cancelEditTask(): void {
+    this.editingTaskId = null;
+  }
+
+  saveTask(): void {
+    if (
+      this.editingOriginalTask &&
+      (this.editingTaskTitle !== this.editingOriginalTask.title ||
+        this.editingTaskDescription !== this.editingOriginalTask.description)
+    ) {
+      const request: UpdateProjectTask = {
+        title: this.editingTaskTitle,
+        description: this.editingTaskDescription,
+      };
+
+      if (this.editingTaskId !== null) {
+        this.projectTaskService
+          .updateProjectTask(this.projectId, this.editingTaskId, request)
+          .subscribe({
+            next: (updateProjectTask) => {
+              this.tasks = this.tasks.map((task) =>
+                task.id === this.editingTaskId ? updateProjectTask : task,
+              );
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      }
+    }
+
+    if (this.editingOriginalTask && this.editingTaskStatus !== this.editingOriginalTask.status) {
+      const request: UpdateProjectTaskStatus = {
+        status: this.editingTaskStatus,
+      };
+
+      if (this.editingTaskId !== null) {
+        this.projectTaskService
+          .updateProjectTaskStatus(this.projectId, this.editingTaskId, request)
+          .subscribe({
+            next: (updateProjectTaskStatus) => {
+              this.tasks = this.tasks.map((task) =>
+                task.id === this.editingTaskId ? updateProjectTaskStatus : task,
+              );
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      }
+    }
+
+    if (this.editingOriginalTask && this.editingTaskPriority !== this.editingOriginalTask.priority) {
+      const request: UpdateProjectTaskPriority = {
+        priority: this.editingTaskPriority,
+      };
+
+      if (this.editingTaskId !== null) {
+        this.projectTaskService
+          .updateProjectTaskPriority(this.projectId, this.editingTaskId, request)
+          .subscribe({
+            next: (updateProjectTaskPriority) => {
+              this.tasks = this.tasks.map((task) =>
+                task.id === this.editingTaskId ? updateProjectTaskPriority : task,
+              );
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      }
+    }
+
+    if (this.editingOriginalTask && this.editingTaskDueDate !== this.editingOriginalTask.dueDate) {
+      const request: UpdateProjectTaskDueDate = {
+        dueDate: this.editingTaskDueDate,
+      };
+
+      if (this.editingTaskId !== null) {
+        this.projectTaskService
+          .updateProjectTaskDueDate(this.projectId, this.editingTaskId, request)
+          .subscribe({
+            next: (updateProjectTaskDueDate) => {
+              this.tasks = this.tasks.map((task) =>
+                task.id === this.editingTaskId ? updateProjectTaskDueDate : task,
+              );
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      }
+    }
+
+    if (this.editingOriginalTask && this.editingTaskAssigneeId !== this.editingOriginalTask.assigneeId) {
+      const request: UpdateProjectTaskAssignee = {
+        userId: this.editingTaskAssigneeId,
+      };
+
+      if (this.editingTaskId !== null) {
+        this.projectTaskService
+          .updateProjectTaskAssignee(this.projectId, this.editingTaskId, request)
+          .subscribe({
+            next: (updateProjectTaskAssignee) => {
+              this.tasks = this.tasks.map((task) =>
+                task.id === this.editingTaskId ? updateProjectTaskAssignee : task,
+              );
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      }
+    }
   }
 }

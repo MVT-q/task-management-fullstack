@@ -1,7 +1,11 @@
 @if (project) {
+  <!-- ==================== PROJECT ==================== -->
+
   <h1>{{ project.name }}</h1>
 
   <p>{{ project.description }}</p>
+
+  <!-- ==================== PROJECT MEMBERS ==================== -->
 
   <button type="button" (click)="toggleMembers()">
     {{ showMembers ? 'Hide members' : 'Show members' }}
@@ -14,6 +18,8 @@
       @for (member of members; track member.userId) {
         <div>
           <span> {{ member.username }} — Role: {{ member.role }} </span>
+
+          <!-- Member role editing -->
 
           @if (editingMemberId === member.userId) {
             <select [(ngModel)]="selectedRole">
@@ -38,28 +44,41 @@
     }
   }
 
+  <!-- Add project member -->
+
   <br />
 
   <input type="number" name="userId" [(ngModel)]="newMemberUserId" placeholder="User ID" />
 
   <button type="button" (click)="addMember()">Add member</button>
 
+  <!-- ==================== CREATE TASK ==================== -->
+
   <br />
 
   <form (ngSubmit)="createTask()">
-    <input type="text" name="taskTitle" [(ngModel)]="taskTitle" placeholder="Task title">
-    
-    <input type="text" name="taskDescription" [(ngModel)]="taskDescription" placeholder="Task description">
+    <input type="text" name="taskTitle" [(ngModel)]="taskTitle" placeholder="Task title" />
+
+    <input
+      type="text"
+      name="taskDescription"
+      [(ngModel)]="taskDescription"
+      placeholder="Task description"
+    />
 
     <span>Due date:</span>
-    <input type="date" name="dueDate" [(ngModel)]="taskDueDate">
-    
+    <input type="date" name="dueDate" [(ngModel)]="taskDueDate" />
+
     <button type="submit">Create task</button>
   </form>
+
+  <!-- ==================== TASKS ==================== -->
 
   <button type="button" (click)="loadTasks()">Show tasks</button>
 
   @if (showTasks) {
+    <!-- Task filters -->
+
     <h2>Tasks</h2>
 
     <input type="text" name="search" [(ngModel)]="search" placeholder="Search tasks" />
@@ -107,6 +126,8 @@
     @if (tasks.length > 0) {
       @for (task of tasks; track task.id) {
         <div>
+          <!-- Task display -->
+
           <h3>{{ task.title }}</h3>
 
           <p>{{ task.description }}</p>
@@ -124,13 +145,52 @@
             Assignee:
             {{ task.assigneeUsername ?? 'Unassigned' }}
           </p>
-          
+
+          <!-- Task editing -->
+
+          <button type="button" (click)="startEditTask(task)">Edit</button>
+
+          @if (editingTaskId === task.id) {
+            <input type="text" name="editTaskTitle" [(ngModel)]="editingTaskTitle" />
+
+            <input type="text" name="editTaskDescription" [(ngModel)]="editingTaskDescription" />
+
+            <select [(ngModel)]="editingTaskStatus">
+              @for (status of statuses; track status.value) {
+                <option [ngValue]="status.value">
+                  {{ status.label }}
+                </option>
+              }
+            </select>
+
+            <select [(ngModel)]="editingTaskPriority">
+              @for (priority of priorities; track priority.value) {
+                <option [ngValue]="priority.value">
+                  {{ priority.label }}
+                </option>
+              }
+            </select>
+
+            <input type="date" name="editDueDate" [(ngModel)]="editingTaskDueDate" />
+
+            <input type="number" name="userId" [(ngModel)]="editingTaskAssigneeId" />
+
+            <!-- Save / Cancel -->
+
+            <button type="button" (click)="saveTask()">Save</button>
+            <button type="button" (click)="cancelEditTask()">Cancel</button>
+          }
+
+          <!-- Task actions -->
+
           <button type="button" (click)="deleteTask(task.id)">Delete task</button>
         </div>
       }
     } @else {
       <p>No tasks found</p>
     }
+
+    <!-- Task pagination -->
 
     <button type="button" [disabled]="currentPage === 1" (click)="previousPage()">Previous</button>
     <button type="button" [disabled]="tasks.length < pageSize" (click)="nextPage()">Next</button>
