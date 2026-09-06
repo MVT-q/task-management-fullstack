@@ -74,7 +74,7 @@
 
   <!-- ==================== TASKS ==================== -->
 
-  <button type="button" (click)="loadTasks()">Show tasks</button>
+  <button type="button" (click)="searchTasks()">Show tasks</button>
 
   @if (showTasks) {
     <!-- Task filters -->
@@ -121,7 +121,7 @@
       <option [ngValue]="true">Descending</option>
     </select>
 
-    <button type="button" (click)="loadTasks()">Search</button>
+    <button type="button" (click)="searchTasks()">Search</button>
 
     @if (tasks.length > 0) {
       @for (task of tasks; track task.id) {

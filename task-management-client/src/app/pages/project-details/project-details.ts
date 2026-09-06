@@ -19,6 +19,7 @@ import { UpdateProjectTaskStatus } from '../../models/update-project-task-status
 import { UpdateProjectTaskPriority } from '../../models/update-project-task-priority.model';
 import { UpdateProjectTaskDueDate } from '../../models/update-project-task-due-date.model';
 import { UpdateProjectTaskAssignee } from '../../models/update-project-task-assignee.model';
+import { forkJoin, Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-project-details',
@@ -178,7 +179,21 @@ export class ProjectDetails implements OnInit {
     });
   }
 
-  loadTasks(): void {
+  loadTasks(): Observable<ProjectTask[]> {
+    const query: TaskQuery = {
+      search: this.search,
+      status: this.selectedStatus,
+      priority: this.selectedPriority,
+      sortBy: this.selectedSortBy,
+      descending: this.selectedDescending,
+      page: this.currentPage,
+      pageSize: this.pageSize,
+    };
+
+    return this.projectTaskService.getTasks(this.projectId, query);
+  }
+
+  searchTasks(): void {
     const query: TaskQuery = {
       search: this.search,
       status: this.selectedStatus,
@@ -266,114 +281,112 @@ export class ProjectDetails implements OnInit {
   }
 
   saveTask(): void {
+    if (this.editingTaskId === null || this.editingOriginalTask === null) {
+      return;
+    }
+
+    const requests: Observable<ProjectTask>[] = [];
+
     if (
-      this.editingOriginalTask &&
-      (this.editingTaskTitle !== this.editingOriginalTask.title ||
-        this.editingTaskDescription !== this.editingOriginalTask.description)
+      this.editingTaskTitle !== this.editingOriginalTask.title ||
+      this.editingTaskDescription !== this.editingOriginalTask.description
     ) {
       const request: UpdateProjectTask = {
         title: this.editingTaskTitle,
         description: this.editingTaskDescription,
       };
 
-      if (this.editingTaskId !== null) {
-        this.projectTaskService
-          .updateProjectTask(this.projectId, this.editingTaskId, request)
-          .subscribe({
-            next: (updateProjectTask) => {
-              this.tasks = this.tasks.map((task) =>
-                task.id === this.editingTaskId ? updateProjectTask : task,
-              );
-            },
-            error: (error) => {
-              console.error(error);
-            },
-          });
-      }
+      const update$ = this.projectTaskService.updateProjectTask(
+        this.projectId,
+        this.editingTaskId,
+        request,
+      );
+
+      requests.push(update$);
     }
 
-    if (this.editingOriginalTask && this.editingTaskStatus !== this.editingOriginalTask.status) {
+    if (this.editingTaskStatus !== this.editingOriginalTask.status) {
       const request: UpdateProjectTaskStatus = {
         status: this.editingTaskStatus,
       };
 
-      if (this.editingTaskId !== null) {
-        this.projectTaskService
-          .updateProjectTaskStatus(this.projectId, this.editingTaskId, request)
-          .subscribe({
-            next: (updateProjectTaskStatus) => {
-              this.tasks = this.tasks.map((task) =>
-                task.id === this.editingTaskId ? updateProjectTaskStatus : task,
-              );
-            },
-            error: (error) => {
-              console.error(error);
-            },
-          });
-      }
+      const update$ = this.projectTaskService.updateProjectTaskStatus(
+        this.projectId,
+        this.editingTaskId,
+        request,
+      );
+
+      requests.push(update$);
     }
 
-    if (this.editingOriginalTask && this.editingTaskPriority !== this.editingOriginalTask.priority) {
+    if (this.editingTaskPriority !== this.editingOriginalTask.priority) {
       const request: UpdateProjectTaskPriority = {
         priority: this.editingTaskPriority,
       };
 
-      if (this.editingTaskId !== null) {
-        this.projectTaskService
-          .updateProjectTaskPriority(this.projectId, this.editingTaskId, request)
-          .subscribe({
-            next: (updateProjectTaskPriority) => {
-              this.tasks = this.tasks.map((task) =>
-                task.id === this.editingTaskId ? updateProjectTaskPriority : task,
-              );
-            },
-            error: (error) => {
-              console.error(error);
-            },
-          });
-      }
+      const update$ = this.projectTaskService.updateProjectTaskPriority(
+        this.projectId,
+        this.editingTaskId,
+        request,
+      );
+
+      requests.push(update$);
     }
 
-    if (this.editingOriginalTask && this.editingTaskDueDate !== this.editingOriginalTask.dueDate) {
+    const originalDueDate = this.editingOriginalTask.dueDate
+      ? this.editingOriginalTask.dueDate.split('T')[0]
+      : null;
+
+    if (this.editingTaskDueDate !== originalDueDate) {
       const request: UpdateProjectTaskDueDate = {
         dueDate: this.editingTaskDueDate,
       };
 
-      if (this.editingTaskId !== null) {
-        this.projectTaskService
-          .updateProjectTaskDueDate(this.projectId, this.editingTaskId, request)
-          .subscribe({
-            next: (updateProjectTaskDueDate) => {
-              this.tasks = this.tasks.map((task) =>
-                task.id === this.editingTaskId ? updateProjectTaskDueDate : task,
-              );
-            },
-            error: (error) => {
-              console.error(error);
-            },
-          });
-      }
+      const update$ = this.projectTaskService.updateProjectTaskDueDate(
+        this.projectId,
+        this.editingTaskId,
+        request,
+      );
+
+      requests.push(update$);
     }
 
-    if (this.editingOriginalTask && this.editingTaskAssigneeId !== this.editingOriginalTask.assigneeId) {
+    if (this.editingTaskAssigneeId !== this.editingOriginalTask.assigneeId) {
       const request: UpdateProjectTaskAssignee = {
         userId: this.editingTaskAssigneeId,
       };
 
-      if (this.editingTaskId !== null) {
-        this.projectTaskService
-          .updateProjectTaskAssignee(this.projectId, this.editingTaskId, request)
-          .subscribe({
-            next: (updateProjectTaskAssignee) => {
-              this.tasks = this.tasks.map((task) =>
-                task.id === this.editingTaskId ? updateProjectTaskAssignee : task,
-              );
-            },
-            error: (error) => {
-              console.error(error);
-            },
-          });
-      }
+      const update$ = this.projectTaskService.updateProjectTaskAssignee(
+        this.projectId,
+        this.editingTaskId,
+        request,
+      );
+
+      requests.push(update$);
     }
+
+    if (requests.length === 0) {
+      return;
+    }
+
+    forkJoin(requests)
+      .pipe(switchMap(() => this.loadTasks()))
+      .subscribe({
+        next: (tasks) => {
+          this.tasks = tasks;
+          this.showTasks = true;
+
+          const updatedTask = tasks.find((task) => task.id === undefined);
+
+          console.log('updatedTask:', updatedTask);
+
+          this.editingOriginalTask = updatedTask ?? null;
+
+          console.log('originalTask:', this.editingOriginalTask);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
   }
 }
