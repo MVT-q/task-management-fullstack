@@ -9,6 +9,7 @@ import { UpdateProjectTaskStatus } from '../models/update-project-task-status.mo
 import { UpdateProjectTaskPriority } from '../models/update-project-task-priority.model';
 import { UpdateProjectTaskDueDate } from '../models/update-project-task-due-date.model';
 import { UpdateProjectTaskAssignee } from '../models/update-project-task-assignee.model';
+import { PagedResult } from '../models/paged-result.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class ProjectTaskService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getTasks(projectId: number, query: TaskQuery): Observable<ProjectTask[]> {
+  getTasks(projectId: number, query: TaskQuery): Observable<PagedResult<ProjectTask>> {
     let params = new HttpParams();
 
     if (query.search) {
@@ -49,7 +50,7 @@ export class ProjectTaskService {
       params = params.set('pageSize', query.pageSize);
     }
 
-    return this.http.get<ProjectTask[]>(`${this.apiUrl}/${projectId}/tasks`, { params });
+    return this.http.get<PagedResult<ProjectTask>>(`${this.apiUrl}/${projectId}/tasks`, { params });
   }
 
   createProjectTask(projectId: number, request: CreateProjectTask): Observable<ProjectTask> {

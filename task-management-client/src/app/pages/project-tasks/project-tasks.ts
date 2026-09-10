@@ -13,6 +13,7 @@ import { UpdateProjectTaskStatus } from '../../models/update-project-task-status
 import { UpdateProjectTaskPriority } from '../../models/update-project-task-priority.model';
 import { UpdateProjectTaskDueDate } from '../../models/update-project-task-due-date.model';
 import { UpdateProjectTaskAssignee } from '../../models/update-project-task-assignee.model';
+import { PagedResult } from '../../models/paged-result.model';
 
 @Component({
   selector: 'app-project-tasks',
@@ -54,6 +55,7 @@ export class ProjectTasks {
 
   currentPage = 1;
   pageSize = 2;
+  totalCount = 0;
 
   taskTitle = '';
   taskDescription = '';
@@ -70,7 +72,7 @@ export class ProjectTasks {
 
   constructor(private readonly projectTaskService: ProjectTaskService) {}
 
-  loadTasks(): Observable<ProjectTask[]> {
+  loadTasks(): Observable<PagedResult<ProjectTask>> {
     const query: TaskQuery = {
       search: this.search,
       status: this.selectedStatus,
@@ -87,8 +89,9 @@ export class ProjectTasks {
   searchTasks(): void {
     this.loadTasks().subscribe({
       next: (tasks) => {
-        this.tasks = tasks;
+        this.tasks = tasks.items;
         this.showTasks = true;
+        this.totalCount = tasks.totalCount;
       },
       error: (error) => {
         console.error(error);
@@ -97,12 +100,21 @@ export class ProjectTasks {
   }
 
   nextPage(): void {
-    if (this.tasks.length === this.pageSize) {
-      this.currentPage++;
-      this.loadTasks();
-    } else if (this.tasks.length < this.pageSize) {
+    if (this.currentPage >= this.totalPages) {
       return;
     }
+
+    this.currentPage++;
+
+    this.loadTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks.items;
+        this.totalCount = tasks.totalCount;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   previousPage(): void {
@@ -111,7 +123,20 @@ export class ProjectTasks {
     }
 
     this.currentPage--;
-    this.loadTasks();
+
+    this.loadTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks.items;
+        this.totalCount = tasks.totalCount;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalCount / this.pageSize);
   }
 
   createTask(): void {
@@ -254,10 +279,11 @@ export class ProjectTasks {
       .pipe(switchMap(() => this.loadTasks()))
       .subscribe({
         next: (tasks) => {
-          this.tasks = tasks;
+          this.tasks = tasks.items;
           this.showTasks = true;
+          this.totalCount = tasks.totalCount;
 
-          const updatedTask = tasks.find((task) => task.id === this.editingTaskId);
+          const updatedTask = tasks.items.find((task) => task.id === this.editingTaskId);
 
           this.editingOriginalTask = updatedTask ?? null;
         },

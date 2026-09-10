@@ -66,7 +66,7 @@ namespace TaskMenagementAPI.Services
             return ToDto(task);
         }
 
-        public async Task<List<ProjectTaskDto>?> GetProjectTasksAsync(
+        public async Task<PagedResult<ProjectTaskDto>?> GetProjectTasksAsync(
             int projectId, 
             int currentUserId, 
             TaskSortBy? sortBy, 
@@ -123,6 +123,8 @@ namespace TaskMenagementAPI.Services
             if(!string.IsNullOrWhiteSpace(search))
                 query = query.Where(t => t.Title.Contains(search));
 
+            var totalCount = await query.CountAsync();
+
             query = query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize);
@@ -139,7 +141,11 @@ namespace TaskMenagementAPI.Services
                 AssigneeUsername = t.Assignee == null ? null : t.Assignee.Username
             }).ToListAsync();
 
-            return tasks;
+            return new PagedResult<ProjectTaskDto> 
+            {
+                Items = tasks,
+                TotalCount = totalCount
+            };
         }
 
         public async Task<ProjectTaskDto?> UpdateProjectTaskAsync(int projectId, int currentUserId, int taskId, UpdateProjectTaskDto dto)
