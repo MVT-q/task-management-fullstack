@@ -87,16 +87,8 @@ export class ProjectTasks {
   }
 
   searchTasks(): void {
-    this.loadTasks().subscribe({
-      next: (tasks) => {
-        this.tasks = tasks.items;
-        this.showTasks = true;
-        this.totalCount = tasks.totalCount;
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+    this.refreshTasks();
+    this.showTasks = true;
   }
 
   nextPage(): void {
@@ -105,16 +97,7 @@ export class ProjectTasks {
     }
 
     this.currentPage++;
-
-    this.loadTasks().subscribe({
-      next: (tasks) => {
-        this.tasks = tasks.items;
-        this.totalCount = tasks.totalCount;
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+    this.refreshTasks();
   }
 
   previousPage(): void {
@@ -123,16 +106,7 @@ export class ProjectTasks {
     }
 
     this.currentPage--;
-
-    this.loadTasks().subscribe({
-      next: (tasks) => {
-        this.tasks = tasks.items;
-        this.totalCount = tasks.totalCount;
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+    this.refreshTasks();
   }
 
   get totalPages(): number {
@@ -148,7 +122,7 @@ export class ProjectTasks {
 
     this.projectTaskService.createProjectTask(this.projectId, task).subscribe({
       next: () => {
-        this.loadTasks();
+        this.refreshTasks();
 
         this.taskTitle = '';
         this.taskDescription = '';
@@ -291,5 +265,17 @@ export class ProjectTasks {
           console.error(error);
         },
       });
+  }
+
+  refreshTasks(): void {
+    this.loadTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks.items;
+        this.totalCount = tasks.totalCount;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 }
