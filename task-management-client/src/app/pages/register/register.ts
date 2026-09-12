@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { RegisterRequest } from '../../models/auth/register-request.model';
 import { Router } from '@angular/router';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -25,22 +26,18 @@ export class Register {
       password: this.password,
     };
 
-    this.authService.register(request).subscribe({
-      next: () => {
-        this.authService.login(request).subscribe({
-          next: (response) => {
-            localStorage.setItem('token', response.token);
-            this.router.navigate(['/projects']);
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+    this.authService
+      .register(request)
+      .pipe(switchMap(() => this.authService.login(request)))
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          this.router.navigate(['/projects']);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
   }
 
   toLogin(): void {
