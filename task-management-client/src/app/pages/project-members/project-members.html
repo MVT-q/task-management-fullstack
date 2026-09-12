@@ -1,40 +1,86 @@
-<button type="button" (click)="toggleMembers()">
-  {{ showMembers ? 'Hide members' : 'Show members' }}
-</button>
-
-@if (showMembers) {
-  @if (members.length > 0) {
+<section class="members-section">
+  <div class="section-header">
     <h2>Members</h2>
 
-    @for (member of members; track member.userId) {
-      <div>
-        <span> {{ member.username }} — Role: {{ member.role }} </span>
+    <button class="button button-secondary" type="button" (click)="toggleMembers()">
+      {{ showMembers ? 'Hide members' : 'Show members' }}
+    </button>
+  </div>
 
-        @if (editingMemberId === member.userId) {
-          <select [(ngModel)]="selectedRole">
-            @for (role of roles; track role.value) {
-              <option [ngValue]="role.value">
-                {{ role.label }}
-              </option>
+  @if (showMembers) {
+    @if (members.length > 0) {
+      <div class="members-list">
+        @for (member of members; track member.userId) {
+          <article class="member-item">
+            <div class="member-info">
+              <strong>{{ member.username }}</strong>
+              <span class="muted">Role: {{ member.role }}</span>
+            </div>
+
+            @if (editingMemberId === member.userId) {
+              <div class="member-actions">
+                <select class="input" [(ngModel)]="selectedRole">
+                  @for (role of roles; track role.value) {
+                    <option [ngValue]="role.value">
+                      {{ role.label }}
+                    </option>
+                  }
+                </select>
+
+                <button
+                  class="button button-primary"
+                  type="button"
+                  (click)="saveMemberRole(member.userId)"
+                >
+                  Save
+                </button>
+
+                <button
+                  class="button button-secondary"
+                  type="button"
+                  (click)="cancelMemberRoleEdit()"
+                >
+                  Cancel
+                </button>
+              </div>
+            } @else {
+              <button
+                class="button button-secondary"
+                type="button"
+                (click)="startEditMemberRole(member)"
+              >
+                Edit role
+              </button>
             }
-          </select>
-          <button type="button" (click)="saveMemberRole(member.userId)">Save</button>
 
-          <button type="button" (click)="cancelMemberRoleEdit()">Cancel</button>
-        } @else {
-          <button type="button" (click)="startEditMemberRole(member)">Edit role</button>
+            <button
+              class="button button-danger"
+              type="button"
+              (click)="removeMember(member.userId)"
+            >
+              Remove
+            </button>
+          </article>
         }
-
-        <button type="button" (click)="removeMember(member.userId)">Remove</button>
       </div>
+    } @else {
+      <p class="muted">No members found</p>
     }
-  } @else {
-    <p>No members found</p>
   }
-}
 
-<br />
+  <div class="add-member">
+    <h3>Add member</h3>
 
-<input type="number" name="userId" [(ngModel)]="newMemberUserId" placeholder="User ID" />
+    <div class="add-member-row">
+      <input
+        class="input"
+        type="number"
+        name="userId"
+        [(ngModel)]="newMemberUserId"
+        placeholder="User ID"
+      />
 
-<button type="button" (click)="addMember()">Add member</button>
+      <button class="button button-primary" type="button" (click)="addMember()">Add member</button>
+    </div>
+  </div>
+</section>

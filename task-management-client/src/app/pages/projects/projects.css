@@ -1,0 +1,136 @@
+:host {
+  display: block;
+}
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24px;
+  background: #f3f4f6;
+}
+
+.projects-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.card {
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font: inherit;
+  background: #ffffff;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.projects-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.project-card h2 {
+  margin-bottom: 8px;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.button {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.button-primary {
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.button-primary:hover {
+  background: #1d4ed8;
+}
+
+.button-secondary {
+  color: #1f2937;
+  background: #e5e7eb;
+}
+
+.button-secondary:hover {
+  background: #d1d5db;
+}
+
+.button-danger {
+  color: #ffffff;
+  background: #dc2626;
+}
+
+.button-danger:hover {
+  background: #b91c1c;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 16px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .card {
+    padding: 18px;
+  }
+}

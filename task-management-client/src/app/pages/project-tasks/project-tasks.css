@@ -1,0 +1,171 @@
+:host {
+  display: block;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.card {
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.task-form,
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.task-form h3,
+.filters h3 {
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form label,
+.task-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font: inherit;
+  background: #ffffff;
+}
+
+.input:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.tasks-list {
+  display: grid;
+  gap: 16px;
+}
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card h3 {
+  margin: 0;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.task-details span {
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: #f3f4f6;
+  font-size: 14px;
+}
+
+.button-row,
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination {
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.button {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.button-primary {
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.button-primary:hover {
+  background: #1d4ed8;
+}
+
+.button-secondary {
+  color: #1f2937;
+  background: #e5e7eb;
+}
+
+.button-secondary:hover {
+  background: #d1d5db;
+}
+
+.button-danger {
+  color: #ffffff;
+  background: #dc2626;
+}
+
+.button-danger:hover {
+  background: #b91c1c;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+@media (max-width: 600px) {
+  .section-header,
+  .task-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}

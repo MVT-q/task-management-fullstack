@@ -1,11 +1,16 @@
-@if (project) {
-  <h1>{{ project.name }}</h1>
+<div class="page project-details-page">
+  @if (project) {
+    <header class="project-header">
+      <h1>{{ project.name }}</h1>
+      <p class="muted">{{ project.description }}</p>
+    </header>
 
-  <p>{{ project.description }}</p>
+    <section class="card">
+      <app-project-members [projectId]="projectId" />
+    </section>
 
-  <app-project-members [projectId]="projectId" />
-
-  <br />
-
-  <app-project-tasks [projectId]="projectId" />
-}
+    <section class="card">
+      <app-project-tasks [projectId]="projectId" />
+    </section>
+  }
+</div>

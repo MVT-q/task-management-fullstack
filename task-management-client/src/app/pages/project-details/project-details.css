@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24px;
+  background: #f3f4f6;
+}
+
+.project-details-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.project-header {
+  margin-bottom: 24px;
+}
+
+.project-header h1 {
+  margin: 0 0 8px;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+.card {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+}
