@@ -2,8 +2,8 @@
   <div class="section-header">
     <h2>Tasks</h2>
 
-    <button class="button button-secondary" type="button" (click)="searchTasks()">
-      {{ showTasks ? 'Refresh tasks' : 'Show tasks' }}
+    <button class="button button-secondary" type="button" (click)="toggleTasks()">
+      {{ showTasks ? 'Hide tasks' : 'Show tasks' }}
     </button>
   </div>
 
@@ -172,9 +172,12 @@
               <p class="muted">{{ task.description }}</p>
 
               <div class="task-details">
-                <span>Status: {{ task.status }}</span>
-                <span>Priority: {{ task.priority }}</span>
-                <span>Due date: {{ task.dueDate ?? 'Not set' }}</span>
+                <span>Status: {{ getStatusLabel(task.status) }}</span>
+                <span>Priority: {{ getPriorityLabel(task.priority) }}</span>
+                <span
+                  >Due date:
+                  {{ task.dueDate ? (task.dueDate | date: 'dd.MM.yyyy') : 'Not set' }}</span
+                >
                 <span>Assignee: {{ task.assigneeUsername ?? 'Unassigned' }}</span>
               </div>
             }

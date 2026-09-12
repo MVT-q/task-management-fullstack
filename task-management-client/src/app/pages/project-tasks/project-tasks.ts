@@ -14,10 +14,11 @@ import { UpdateProjectTaskPriority } from '../../models/task/update-project-task
 import { UpdateProjectTaskDueDate } from '../../models/task/update-project-task-due-date.model';
 import { UpdateProjectTaskAssignee } from '../../models/task/update-project-task-assignee.model';
 import { PagedResult } from '../../models/common/paged-result.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-project-tasks',
-  imports: [FormsModule],
+  imports: [FormsModule, DatePipe],
   templateUrl: './project-tasks.html',
   styleUrl: './project-tasks.css',
 })
@@ -54,7 +55,7 @@ export class ProjectTasks {
   selectedDescending: boolean | undefined;
 
   currentPage = 1;
-  pageSize = 2;
+  pageSize = 5;
   totalCount = 0;
 
   taskTitle = '';
@@ -137,7 +138,7 @@ export class ProjectTasks {
   deleteTask(taskId: number): void {
     this.projectTaskService.deleteProjectTask(this.projectId, taskId).subscribe({
       next: () => {
-        this.tasks = this.tasks.filter((task) => task.id !== taskId);
+        this.refreshTasks();
       },
       error: (error) => {
         console.error(error);
@@ -260,6 +261,7 @@ export class ProjectTasks {
           const updatedTask = tasks.items.find((task) => task.id === this.editingTaskId);
 
           this.editingOriginalTask = updatedTask ?? null;
+          this.editingTaskId = null;
         },
         error: (error) => {
           console.error(error);
@@ -270,6 +272,13 @@ export class ProjectTasks {
   refreshTasks(): void {
     this.loadTasks().subscribe({
       next: (tasks) => {
+        if (tasks.items.length === 0 && this.currentPage > 1) {
+          this.currentPage--;
+
+          this.refreshTasks();
+          return;
+        }
+
         this.tasks = tasks.items;
         this.totalCount = tasks.totalCount;
       },
@@ -277,5 +286,23 @@ export class ProjectTasks {
         console.error(error);
       },
     });
+  }
+
+  getStatusLabel(status: ProjectTaskStatus): string {
+    return this.statuses.find((item) => item.value === status)?.label ?? 'Unknown';
+  }
+
+  getPriorityLabel(priority: ProjectTaskPriority): string {
+    return this.priorities.find((item) => item.value === priority)?.label ?? 'Unknown';
+  }
+
+  toggleTasks(): void {
+    if (this.showTasks) {
+      this.showTasks = false;
+      return;
+    }
+
+    this.refreshTasks();
+    this.showTasks = true;
   }
 }
