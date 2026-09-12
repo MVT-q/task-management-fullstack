@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Project } from '../models/project.model';
-import { CreateProject } from '../models/create-project.model';
-import { UpdateProject } from '../models/update-project.model';
-import { ProjectMember } from '../models/project-member.model';
-import { AddProjectMember } from '../models/add-project-member.model';
-import { UpdateProjectMemberRole } from '../models/update-project-member-role.model';
+import { Project } from '../models/project/project.model';
+import { CreateProject } from '../models/project/create-project.model';
+import { UpdateProject } from '../models/task/update-project.model';
+import { ProjectMember } from '../models/project/project-member.model';
+import { AddProjectMember } from '../models/project/add-project-member.model';
+import { UpdateProjectMemberRole } from '../models/project/update-project-member-role.model';
 
 @Injectable({
   providedIn: 'root',

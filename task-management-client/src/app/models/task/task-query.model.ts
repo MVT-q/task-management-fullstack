@@ -1,6 +1,6 @@
-import { ProjectTaskPriority } from './project-task-priority';
-import { ProjectTaskStatus } from './project-task-status';
-import { TaskSortBy } from './task-sort-by';
+import { ProjectTaskPriority } from '../enums/project-task-priority';
+import { ProjectTaskStatus } from '../enums/project-task-status';
+import { TaskSortBy } from '../enums/task-sort-by';
 
 export interface TaskQuery {
   search?: string;

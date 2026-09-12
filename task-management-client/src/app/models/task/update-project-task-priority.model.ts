@@ -1,4 +1,4 @@
-import { ProjectTaskPriority } from "./project-task-priority";
+import { ProjectTaskPriority } from '../enums/project-task-priority';
 
 export interface UpdateProjectTaskPriority {
   priority: ProjectTaskPriority;

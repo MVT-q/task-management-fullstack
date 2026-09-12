@@ -10,8 +10,6 @@
       <div>
         <span> {{ member.username }} — Role: {{ member.role }} </span>
 
-        <!-- Member role editing -->
-
         @if (editingMemberId === member.userId) {
           <select [(ngModel)]="selectedRole">
             @for (role of roles; track role.value) {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
-import { RegisterRequest } from '../../models/register-request.model';
+import { RegisterRequest } from '../../models/auth/register-request.model';
 import { Router } from '@angular/router';
 
 @Component({

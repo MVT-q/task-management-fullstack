@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { ProjectMember } from '../../models/project-member.model';
-import { ProjectRole } from '../../models/project-role';
+import { ProjectMember } from '../../models/project/project-member.model';
+import { ProjectRole } from '../../models/enums/project-role';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
-import { AddProjectMember } from '../../models/add-project-member.model';
-import { UpdateProjectMemberRole } from '../../models/update-project-member-role.model';
+import { AddProjectMember } from '../../models/project/add-project-member.model';
+import { UpdateProjectMemberRole } from '../../models/project/update-project-member-role.model';
 
 @Component({
   selector: 'app-project-members',
@@ -23,7 +23,7 @@ export class ProjectMembers {
 
   editingMemberId: number | null = null;
 
-  selectedRole: number = 0;
+  selectedRole: ProjectRole = ProjectRole.Member;
   roles = [
     { value: ProjectRole.Member, label: 'Member' },
     { value: ProjectRole.Manager, label: 'Manager' },

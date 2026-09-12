@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ProjectService } from '../../services/project.service';
-import { Project } from '../../models/project.model';
+import { Project } from '../../models/project/project.model';
 import { Router } from '@angular/router';
-import { CreateProject } from '../../models/create-project.model';
+import { CreateProject } from '../../models/project/create-project.model';
 import { FormsModule } from '@angular/forms';
-import { UpdateProject } from '../../models/update-project.model';
+import { UpdateProject } from '../../models/task/update-project.model';
 
 @Component({
   selector: 'app-projects',

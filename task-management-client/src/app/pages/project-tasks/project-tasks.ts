@@ -1,19 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { ProjectTask } from '../../models/project-task.model';
-import { ProjectTaskStatus } from '../../models/project-task-status';
-import { ProjectTaskPriority } from '../../models/project-task-priority';
-import { TaskSortBy } from '../../models/task-sort-by';
+import { ProjectTask } from '../../models/task/project-task.model';
+import { ProjectTaskStatus } from '../../models/enums/project-task-status';
+import { ProjectTaskPriority } from '../../models/enums/project-task-priority';
+import { TaskSortBy } from '../../models/enums/task-sort-by';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable, switchMap } from 'rxjs';
-import { TaskQuery } from '../../models/task-query.model';
+import { TaskQuery } from '../../models/task/task-query.model';
 import { ProjectTaskService } from '../../services/project-task.service';
-import { CreateProjectTask } from '../../models/create-project-task.model';
-import { UpdateProjectTask } from '../../models/update-project-task.model';
-import { UpdateProjectTaskStatus } from '../../models/update-project-task-status.model';
-import { UpdateProjectTaskPriority } from '../../models/update-project-task-priority.model';
-import { UpdateProjectTaskDueDate } from '../../models/update-project-task-due-date.model';
-import { UpdateProjectTaskAssignee } from '../../models/update-project-task-assignee.model';
-import { PagedResult } from '../../models/paged-result.model';
+import { CreateProjectTask } from '../../models/task/create-project-task.model';
+import { UpdateProjectTask } from '../../models/task/update-project-task.model';
+import { UpdateProjectTaskStatus } from '../../models/task/update-project-task-status.model';
+import { UpdateProjectTaskPriority } from '../../models/task/update-project-task-priority.model';
+import { UpdateProjectTaskDueDate } from '../../models/task/update-project-task-due-date.model';
+import { UpdateProjectTaskAssignee } from '../../models/task/update-project-task-assignee.model';
+import { PagedResult } from '../../models/common/paged-result.model';
 
 @Component({
   selector: 'app-project-tasks',

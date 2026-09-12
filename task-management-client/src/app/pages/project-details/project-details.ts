@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project } from '../../models/project.model';
+import { Project } from '../../models/project/project.model';
 import { ProjectService } from '../../services/project.service';
 import { FormsModule } from '@angular/forms';
 import { ProjectMembers } from '../project-members/project-members';
-import { ProjectTasks } from "../project-tasks/project-tasks";
+import { ProjectTasks } from '../project-tasks/project-tasks';
 
 @Component({
   selector: 'app-project-details',
@@ -13,7 +13,7 @@ import { ProjectTasks } from "../project-tasks/project-tasks";
   styleUrl: './project-details.css',
 })
 export class ProjectDetails implements OnInit {
-  projectId: number = 0;
+  projectId = 0;
 
   project: Project | null = null;
 

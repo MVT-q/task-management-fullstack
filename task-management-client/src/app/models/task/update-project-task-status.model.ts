@@ -1,4 +1,4 @@
-import { ProjectTaskStatus } from "./project-task-status";
+import { ProjectTaskStatus } from '../enums/project-task-status';
 
 export interface UpdateProjectTaskStatus {
   status: ProjectTaskStatus;
